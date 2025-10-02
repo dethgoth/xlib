@@ -1,6 +1,6 @@
 package xlib
 
-//cgo LDFLAGS: -lpango -lpangoxft
+//#cgo pkg-config: pango pangoxft
 //#include <pango/pango.h>
 //#include <pango/pangoxft.h>
 import "C"
