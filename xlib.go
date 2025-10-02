@@ -72,6 +72,7 @@ type XErrorEvent struct {
 type Cursor C.Cursor
 type XEvent C.XEvent
 type GC C.GC
+type XGCValues C.XGCValues
 
 var (
 	XErrorCallback func(*Display, *XErrorEvent)
@@ -159,13 +160,13 @@ func HeightOfScreen(screen Screen) int {
 
 func RootWindow(display *Display, screen int) uint32 {
 	screenC := (C.int)(screen)
-	displayC := (C.Display)(display)
+	displayC := (*C.Display)(display)
 	return (uint32)(C.XRootWindow(displayC, screenC))
 }
 
 func DefaultScreen(display *Display) int {
 	displayC := (*C.Display)(display)
-	return int(C.XDefaultScreen)
+	return int(C.XDefaultScreen(displayC))
 }
 
 func DefaultDepth(display *Display, screen int) int {
@@ -175,7 +176,7 @@ func DefaultDepth(display *Display, screen int) int {
 }
 
 func XCreateGC(display *Display, drawable uint32, valuemask uint32, values *XGCValues) GC {
-	displayC := (C.Display)(display)
+	displayC := (*C.Display)(display)
 	drawableC := (C.ulong)(drawable)
 	valuemaskC := (C.ulong)(valuemask)
 	valuesC := (*C.XGCValues)(values)
@@ -185,9 +186,9 @@ func XCreateGC(display *Display, drawable uint32, valuemask uint32, values *XGCV
 func XSetLineAttributes(display *Display, gc GC, line_width uint, line_style int, cap_style int, join_style int) int {
 	displayC := (*C.Display)(display)
 	gcC := (C.GC)(gc)
-	line_widthC := (c.uint)(line_width)
-	line_styleC := (c.int)(line_style)
-	lcap_styleC := (c.int)(cap_style)
-	join_styleC := (c.int)(join_style)
+	line_widthC := (C.uint)(line_width)
+	line_styleC := (C.int)(line_style)
+	cap_styleC := (C.int)(cap_style)
+	join_styleC := (C.int)(join_style)
 	return (int)(C.XSetLineAttributes(displayC, gcC, line_widthC, line_styleC, cap_styleC, join_styleC))
 }
